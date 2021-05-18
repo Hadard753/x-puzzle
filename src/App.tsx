@@ -1,8 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import React from 'react';
+
+import { getNeighbors } from './algo/utils';
+import logo from './logo.svg';
+
 function App() {
+  getNeighbors([1,2,3,4,5,6,7,0,8], 3);
+
   return (
     <div className="App">
       <header className="App-header">
