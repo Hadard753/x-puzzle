@@ -2,18 +2,15 @@ import './App.css';
 
 import React from 'react';
 
-import { getNeighbors } from './algo/utils';
 import logo from './logo.svg';
 
 function App() {
-  getNeighbors([1,2,3,4,5,6,7,0,8], 3);
-
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Welcom to the x-puzzle ML Solver
         </p>
         <a
           className="App-link"

@@ -30,17 +30,28 @@ export const swap = (state: number[], i: number, j:number) => {
     return swapped;
 }
 
-export const getNeighbors = (state: number[], size: number) => {
+export const getNeighbors = (state: number[], size: number) : { R?: number[], L?: number[], U?: number[], D?: number[]} => {
     const zeroIndex = state.findIndex(x=> x===0);
 
-    if (zeroIndex < 0) return "invalid state";
-    const zeroRowIn2D = Math.round(zeroIndex/size);
+    if (zeroIndex < 0) return {};
+    const zeroRowIn2D = Math.floor(zeroIndex/size);
     const zeroColIn2D = zeroIndex%size;
 
-    const R = zeroColIn2D === 9 ? undefined : swap(state, zeroIndex, zeroIndex+1);
-    const L = zeroColIn2D === size-1 ? undefined : swap(state, zeroIndex, zeroIndex-1);
+    const R = zeroColIn2D === 0 ? undefined : swap(state, zeroIndex, zeroIndex-1);
+    const L = zeroColIn2D === size-1 ? undefined : swap(state, zeroIndex, zeroIndex+1);
     const D = zeroRowIn2D === 0 ? undefined : swap(state, zeroIndex, zeroIndex-size);
     const U = zeroRowIn2D === size-1 ? undefined : swap(state, zeroIndex, zeroIndex+size);
 
     return {R,L,D,U};
 }
+
+export const arrayEquals = (a: any[], b: any[]) => {
+  return Array.isArray(a) &&
+    Array.isArray(b) &&
+    a.length === b.length &&
+    a.every((val, index) => val === b[index]);
+}
+
+// best
+export const getKeyValue = <T extends object, U extends keyof T>(key: U) => (obj: T) =>
+  obj[key];
