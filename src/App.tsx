@@ -1,27 +1,22 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import React from 'react';
+import Col from 'react-bootstrap/esm/Col';
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/esm/Row';
 
-import logo from './logo.svg';
+import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcom to the x-puzzle ML Solver
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Row>
+        <Col className="col-md-6">Settings</Col>
+        <Col className="col-md-6">Result</Col>
+      </Row>
+      <Footer />
+    </Container>
   );
 }
 
