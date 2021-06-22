@@ -1,41 +1,61 @@
 import { Node } from './models/Node';
-import { arrayEquals, getKeyValue, getNeighbors } from './utils';
+import { _1Dto2DState, arrayEquals, getKeyValue, getNeighbors, PriorityQueue } from './utils';
+
+const heuristic = (G: number[], curr: number[]) => {
+    const size = Math.sqrt(G.length)
+    let distance = 0;
+    for(let i=0; i < curr.length; i++) { // Foreach tile in the puzzle calculate its distance from the goal state (Manhattan distance)
+        const currIndex = curr.findIndex(x=> x===i);
+        if (currIndex < 0) return -1;
+        const currRowIn2D = Math.floor(currIndex/size);
+        const currColIn2D = currIndex%size;
+
+        const goalIndex = curr.findIndex(x=> x===i);
+        const goalRowIn2D = Math.floor(goalIndex/size);
+        const goalColIn2D = goalIndex%size;
+        if (goalIndex < 0) return -1;
+
+        distance += Math.abs(currRowIn2D-goalRowIn2D) + Math.abs(currColIn2D-goalColIn2D);
+    }
+    return distance;
+}
 
 export const Astar = (G: number[], root: number[]) => {
-    // Create a Queue
-    let Q: Node[] = [];
-    let closeList = new Set();
+    var openList = new PriorityQueue();
+    // push startNode onto openList
+    const rootH = heuristic(G,root);
+    openList.enqueue({key: JSON.stringify(root), value: root, g: 0, h: rootH, f: rootH, parent: undefined, move: undefined}, rootH);
+    const closedList = new Map();
 
-    // Label root as discovered
-    closeList.add(JSON.stringify(root));
+    // openList is not empty
+    while (!openList.isEmpty()) {
+        // find lowest f in openList
+        const currentNode = openList.dequeue().element;
 
-    // Enqueue root
-    Q.push({value: root});
-
-    // While Q is not empty
-    while (Q.length) {
-        // v := Q.dequeue()
-        let v: Node = Q.shift() || { value: [] };
-
-        // If v is the goal
-        if(arrayEquals(v.value,G)) {
-            return v;
+        // if currentNode is final, return the successful path
+        if(arrayEquals(currentNode.value,G)) {
+            return currentNode;
         }
+        closedList.set(currentNode.key, currentNode);
 
-        // Log every element that comes out of the Queue
-        const edges = getNeighbors(v.value, Math.sqrt(v.value.length));
-        // 1. In the neighbors object, we search for nodes this node is directly connected to.
-        // 2. We filter out the nodes that have already been explored.
-        // 3. Then we mark each unexplored node as explored and add it to the queue.
+        const edges = getNeighbors(currentNode.value, Math.sqrt(currentNode.value.length));
+        //  foreach neighbor of currentNode
         Object.keys(edges)
         .forEach((n: string) => {
-            const w: Node = { value : getKeyValue(n as never)(edges) };
-            if(w.value) {
-                if(!closeList.has(JSON.stringify(w.value))) {
-                    closeList.add(JSON.stringify(w.value));
-                    w.parent = v;
-                    w.move = n;
-                    Q.push(w);
+            if(getKeyValue(n as never)(edges)) {
+                const neighbor = { value : getKeyValue(n as never)(edges), key: JSON.stringify(getKeyValue(n as never)(edges)) };
+                const g = currentNode.g+1;
+                const h = heuristic(G, neighbor.value);
+                const f = g+h;
+                const neighborInOpenList = openList.getByKey(neighbor.key);
+                // if neighbor is not in openList
+                if(!neighborInOpenList) {
+                    openList.enqueue({ ...neighbor, g, h, f, move: n, parent: currentNode }, f)
+                } else if (g < neighborInOpenList.g) { // if neighbor is in openList but the current g is better than previous g
+                    neighborInOpenList.g = g;
+                    neighborInOpenList.f = f;
+                    neighborInOpenList.parent = currentNode;
+                    neighborInOpenList.move = n;
                 }
             }
         });

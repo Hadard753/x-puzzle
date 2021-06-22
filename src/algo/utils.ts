@@ -55,3 +55,84 @@ export const arrayEquals = (a: any[], b: any[]) => {
 // best
 export const getKeyValue = <T extends object, U extends keyof T>(key: U) => (obj: T) =>
   obj[key];
+
+
+// User defined class
+// to store element and its priority
+class QElement {
+    element;
+    priority: number;
+
+	constructor(element: any, priority: number)
+	{
+		this.element = element;
+		this.priority = priority;
+	}
+}
+
+// PriorityQueue class
+export class PriorityQueue {
+    items: any[]
+
+	// An array is used to implement priority
+	constructor()
+	{
+		this.items = [];
+	}
+
+    // enqueue function to add element
+    // to the queue as per priority
+    enqueue(element: any, priority: number)
+    {
+        // creating object from queue element
+        var qElement = new QElement(element, priority);
+        var contain = false;
+
+        // iterating through the entire
+        // item array to add element at the
+        // correct location of the Queue
+        for (var i = 0; i < this.items.length; i++) {
+            if (this.items[i].priority > qElement.priority) {
+                // Once the correct location is found it is
+                // enqueued
+                this.items.splice(i, 0, qElement);
+                contain = true;
+                break;
+            }
+        }
+
+        // if the element have the highest priority
+        // it is added at the end of the queue
+        if (!contain) {
+            this.items.push(qElement);
+        }
+    }
+
+    // dequeue method to remove
+    // element from the queue
+    dequeue()
+    {
+        // return the dequeued element
+        // and remove it.
+        // if the queue is empty
+        // returns Underflow
+        if (this.isEmpty())
+            return "Underflow";
+        return this.items.shift();
+    }
+
+    // isEmpty function
+    isEmpty()
+    {
+        // return true if the queue is empty.
+        return this.items.length === 0;
+    }
+
+    getByKey(key: string) {
+        return this.items.find((item: { key: string; }) => item.key === key)
+    }
+
+    updateByKey(key: string, updated: any) {
+        this.items.forEach((item: { key: string; }) => item.key === key ? {...item, ...updated} : item)
+    }
+}

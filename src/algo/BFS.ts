@@ -22,7 +22,6 @@ export const BFS = (G: number[], root: number[]) => {
             return v;
         }
 
-        // Log every element that comes out of the Queue
         const edges = getNeighbors(v.value, Math.sqrt(v.value.length));
         // 1. In the neighbors object, we search for nodes this node is directly connected to.
         // 2. We filter out the nodes that have already been explored.
