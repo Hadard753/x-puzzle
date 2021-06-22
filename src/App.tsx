@@ -7,13 +7,14 @@ import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/esm/Row';
 
 import Footer from './components/Footer';
+import Settings from './components/Settings';
 
 function App() {
   return (
     <Container>
       <Row>
-        <Col className="col-md-6">Settings</Col>
-        <Col className="col-md-6">Result</Col>
+        <Col><Settings /></Col>
+        <Col>Result</Col>
       </Row>
       <Footer />
     </Container>

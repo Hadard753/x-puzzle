@@ -1,4 +1,3 @@
-import { Node } from './models/Node';
 import { _1Dto2DState, arrayEquals, getKeyValue, getNeighbors, PriorityQueue } from './utils';
 
 const heuristic = (G: number[], curr: number[]) => {
