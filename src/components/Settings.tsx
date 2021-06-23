@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Form from 'react-bootstrap/Form';
 
 import { arrayEquals, getGoalState } from '../algo/utils';
+import FileInputAndReader from './FileInputAndReader';
 
 // import DigitsInput from './DigitsInput';
 
@@ -42,7 +43,7 @@ const Settings = ({onSubmit}: {onSubmit: any}) => {
                                 {algoOptions.map(algo => (
                                     <Button
                                         key={algo}
-                                        variant="secondary"
+                                        variant="light"
                                         onClick={() => setSettings({...settings, algo})}
                                         active={settings.algo === algo}>
                                             {algo}
@@ -75,31 +76,18 @@ const Settings = ({onSubmit}: {onSubmit: any}) => {
                             onClick={() => onSubmit({
                                 ...settings,
                                 initialState: initialState.split('-').map(n=>parseInt(n))
-                            })} disabled={!validateSettings()} variant="outline-success" style={{ width: "100%" }}>
+                            })} disabled={!validateSettings()} variant="outline-light" style={{ width: "100%" }}>
                             Solve !
                         </Button>
                     </Col>
                 </Row>
             </Form>
             <div className="separator">OR</div>
-            <Row>
-                <Col style={{textAlign:"center"}}>
-                    <h3>Upload Settings File</h3>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <div className="input-group">
-                        <div className="custom-file">
-                            <Form.Label className="custom-file-label">Choose file</Form.Label>
-                            <input type="file" className="custom-file-input" id="inputGroupFile04"/>
-                        </div>
-                        <div className="input-group-append">
-                            <Button variant="outline-success">Upload</Button>
-                        </div>
-                    </div>
-                </Col>
-            </Row>
+            <FileInputAndReader onSubmit={({ algo, size, initialState }: any) => {
+                setSettings({ algo, size });
+                setInitialState(initialState);
+                onSubmit({ algo, size, initialState: initialState.split('-').map((n:any)=>parseInt(n)), download: true });
+            }} />
         </Container>
     );
 }

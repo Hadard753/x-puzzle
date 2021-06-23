@@ -1,4 +1,4 @@
-import { _1Dto2DState, arrayEquals, getKeyValue, getNeighbors, PriorityQueue } from './utils';
+import { arrayEquals, getKeyValue, getNeighbors, PriorityQueue } from './utils';
 
 const heuristic = (G: number[], curr: number[]) => {
     const size = Math.sqrt(G.length)
