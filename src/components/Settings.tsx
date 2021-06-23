@@ -1,3 +1,5 @@
+import './Settings.css';
+
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import ButtonGroup from 'react-bootstrap/esm/ButtonGroup';
@@ -6,22 +8,14 @@ import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Form from 'react-bootstrap/Form';
 
-import { arrayEquals } from '../algo/utils';
-import DigitsInput from './DigitsInput';
+import { arrayEquals, getGoalState } from '../algo/utils';
 
-const Settings = () => {
+// import DigitsInput from './DigitsInput';
+
+const Settings = ({onSubmit}: {onSubmit: any}) => {
     const algoOptions = ["IDS", "BFS", "A *"];
     const [settings, setSettings] = useState({algo: algoOptions[0], size: 3});
     const [initialState, setInitialState] = useState('1-2-3-4-5-6-7-8-0');
-
-    const getGoalState = (size:number) => {
-        let goal = [];
-        for (let i=1; i<size*size; i++) {
-            goal.push(i);
-        }
-        goal.push(0);
-        return goal;
-    }
 
     const validateSettings = () => {
         if(settings.size<0 || settings.size > 1000)
@@ -34,6 +28,11 @@ const Settings = () => {
 
     return (
         <Container>
+            <Row>
+                <Col style={{textAlign:"center"}}>
+                    <h3>Enter Settings Online</h3>
+                </Col>
+            </Row>
             <Form>
                 <Row>
                     <Col>
@@ -72,12 +71,35 @@ const Settings = () => {
                 </Row>
                 <Row>
                     <Col>
-                        <Button disabled={!validateSettings()} variant="primary" type="submit" style={{ width: "100%" }}>
+                        <Button
+                            onClick={() => onSubmit({
+                                ...settings,
+                                initialState: initialState.split('-').map(n=>parseInt(n))
+                            })} disabled={!validateSettings()} variant="outline-success" style={{ width: "100%" }}>
                             Solve !
                         </Button>
                     </Col>
                 </Row>
             </Form>
+            <div className="separator">OR</div>
+            <Row>
+                <Col style={{textAlign:"center"}}>
+                    <h3>Upload Settings File</h3>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <div className="input-group">
+                        <div className="custom-file">
+                            <Form.Label className="custom-file-label">Choose file</Form.Label>
+                            <input type="file" className="custom-file-input" id="inputGroupFile04"/>
+                        </div>
+                        <div className="input-group-append">
+                            <Button variant="outline-success">Upload</Button>
+                        </div>
+                    </div>
+                </Col>
+            </Row>
         </Container>
     );
 }

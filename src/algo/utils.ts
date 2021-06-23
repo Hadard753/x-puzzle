@@ -52,6 +52,15 @@ export const arrayEquals = (a: any[], b: any[]) => {
     a.every((val, index) => val === b[index]);
 }
 
+export const getGoalState = (size:number) => {
+    let goal = [];
+    for (let i=1; i<size*size; i++) {
+        goal.push(i);
+    }
+    goal.push(0);
+    return goal;
+}
+
 // best
 export const getKeyValue = <T extends object, U extends keyof T>(key: U) => (obj: T) =>
   obj[key];
